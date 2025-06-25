@@ -83,7 +83,7 @@ const Home = () => {
                 <Link href={`/job/details/${job.id}`}>
                   <div
                     key={job.id}
-                    className="bg-white p-6 rounded-2xl shadow hover:shadow-lg transition cursor-pointer"
+                    className="bg-white p-6 rounded-2xl h-full shadow hover:shadow-lg transition cursor-pointer"
                   >
                     <h2 className="text-xl font-semibold text-gray-800">
                       {job?.jobTitle}

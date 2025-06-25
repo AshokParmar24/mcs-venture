@@ -6,6 +6,8 @@ import { getJobsList } from "../../services/api";
 import { jobsListFilter, jobsListUpdate } from "@/redux/actions/jobsAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import useTheme from "@/config/useTheme";
+import { BsSun, BsMoon } from "react-icons/bs";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
@@ -14,6 +16,7 @@ const Home = () => {
   const [applyId, setApplyId] = useState([]);
   const dispatch = useDispatch();
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
 
   const { jobList, filtersJobs } = useSelector(
     (state) => state?.jobsReducer || []
@@ -58,13 +61,19 @@ const Home = () => {
   return (
     <>
       {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <div className="min-h-screen flex justify-center items-center h-40 dark:bg-gray-700">
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent dark:white rounded-full animate-spin"></div>
         </div>
       ) : (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+        <div className="min-h-screen bg-gray-50 p-4 sm:p-6 dark:text-white dark:bg-gray-700">
           <h1 className="text-3xl font-bold mb-6 text-center">Job Board</h1>
           <div className="flex flex-wrap gap-4 justify-center mb-8">
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded bg-gray-200 dark:bg-gray-500"
+            >
+              {theme === "dark" ? <BsSun /> : <BsMoon />}
+            </button>
             <input
               type="text"
               placeholder="Search by job title..."
@@ -76,7 +85,7 @@ const Home = () => {
             <select
               value={selectTag}
               onChange={(e) => setSelectTag(e.target.value)}
-              className="border px-4 py-2 rounded-md w-full sm:w-48"
+              className="border px-4 py-2 rounded-md w-full sm:w-48  dark:bg-gray-700"
             >
               <option value="">All Types</option>
               <option value="Full-time">Full-time</option>
@@ -92,38 +101,40 @@ const Home = () => {
                 <Link href={`/job/details/${job.id}`}>
                   <div
                     key={job.id}
-                    className="bg-white p-6 rounded-2xl h-full shadow hover:shadow-lg transition cursor-pointer"
+                    className="bg-white p-6 rounded-2xl  dark:bg-gray-600 dark:text-white h-full shadow hover:shadow-lg transition cursor-pointer"
                   >
-                    <h2 className="text-xl font-semibold text-gray-800">
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
                       {job?.jobTitle}
                     </h2>
-                    <p className="text-sm text-gray-500">{job?.companyName}</p>
-                    <p className="text-sm text-gray-500 mb-3">
+                    <p className="text-sm text-gray-500 dark:text-gray-300">
+                      {job?.companyName}
+                    </p>
+                    <p className="text-sm text-gray-500 mb-3 dark:text-gray-300">
                       {job?.location}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 mb-4">
+                    <div className="flex flex-wrap gap-2 mb-4 ">
                       {job.tags?.map((tag, i) => (
                         <span
                           key={i}
-                          className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
+                          className="bg-blue-100 dark:text-gray-500 dark:bg-white text-blue-700 text-xs px-2 py-1 rounded-full"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-
-                    <button
-                      onClick={() => router.push(`/job/${job.id}`)}
-                      disabled={applyId.includes(job.id)}
-                      className={`text-white text-sm px-4 py-2 rounded-full transition ${
-                        applyId.includes(job.id)
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
-                      }`}
-                    >
-                      {applyId.includes(job.id) ? "Applied" : "Apply"}
-                    </button>
+                    <Link href={`/job/${job.id}`}>
+                      <button
+                        disabled={applyId.includes(job.id)}
+                        className={`text-white text-sm px-4 py-2 rounded-full transition ${
+                          applyId.includes(job.id)
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                        }`}
+                      >
+                        {applyId.includes(job.id) ? "Applied" : "Apply"}
+                      </button>
+                    </Link>
                   </div>
                 </Link>
               ))

@@ -50,11 +50,8 @@ const JobApply = () => {
   }, [file]);
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-lg shadow mt-10">
-      <div className="flex justify-between">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">
-          Apply for this Job
-        </h2>
+    <div className="max-w-xl min-h-screen mx-auto p-6 bg-white rounded-lg shadow pt-10  dark:bg-gray-700">
+      <div className="flex flex-col gap-2">
         <button
           type="button"
           onClick={() => router.push("/")}
@@ -62,7 +59,10 @@ const JobApply = () => {
           title="Go back"
         >
           <AiOutlineArrowLeft size={24} />
-        </button>
+        </button>{" "}
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+          Apply for this Job
+        </h2>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

@@ -2,7 +2,7 @@
 
 import { set, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AiOutlineClose,
   AiOutlineFilePdf,
@@ -13,6 +13,7 @@ import { FiUpload } from "react-icons/fi";
 const JobApply = () => {
   const router = useRouter();
   const { id } = router.query;
+  const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [err, setErr] = useState(false);
 
@@ -57,10 +58,10 @@ const JobApply = () => {
         <button
           type="button"
           onClick={() => router.push("/")}
-          className="text-gray-500 hover:text-gray-700  hover:text-gray-300 cursor-pointer bg-gray-100 rounded-full h-10 w-10 flex justify-center"
+          className=" right-2 bg-gray-200 cursor-pointer px-2 h-10 w-10 text-gray-600 hover:bg-grey-500 hover:text-white p-1 rounded-full transition w-10"
           title="Go back"
         >
-          <AiOutlineArrowLeft size={24} className="mt-2" />
+          <AiOutlineArrowLeft size={24} />
         </button>
       </div>
 
@@ -94,7 +95,7 @@ const JobApply = () => {
           <div className="relative w-full flex flex-col items-center gap-2 border rounded-md p-3">
             <button
               onClick={() => setFile(null)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-600"
+              className="absolute top-2 right-2 bg-gray-200 text-gray-600 hover:bg-red-500 hover:text-white p-1 rounded-full transition"
               title="Remove file"
             >
               <AiOutlineClose size={18} />
@@ -111,7 +112,8 @@ const JobApply = () => {
             <input
               type="file"
               accept=".pdf,.doc,.docx"
-              className={`w-full px-3 py-2 rounded h-30 p-2 
+              ref={fileInputRef}
+              className={`w-full px-3 py-2 rounded h-30 p-2 cursor-pointer
                         ${
                           err
                             ? "border border-red-500"
@@ -133,8 +135,11 @@ const JobApply = () => {
               }}
             />
 
-            <div className="flex justify-center items-center mt-4 absolute top-2 left-45">
-              {!file && (
+            {!file && (
+              <div
+                onClick={() => fileInputRef.current.click()}
+                className="flex justify-center items-center mt-4 absolute cursor-pointer top-2 left-45"
+              >
                 <div className="flex flex-col items-center">
                   <FiUpload className="text-gray-400 w-12 h-12 opacity-50" />
 
@@ -142,8 +147,8 @@ const JobApply = () => {
                     No resume uploaded
                   </span>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
 

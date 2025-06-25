@@ -5,20 +5,22 @@ import Link from "next/link";
 import { getJobsList } from "../../services/api";
 import { jobsListFilter, jobsListUpdate } from "@/redux/actions/jobsAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [selectTag, setSelectTag] = useState("");
+  const [applyId, setApplyId] = useState([]);
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const { jobList, filtersJobs } = useSelector(
     (state) => state?.jobsReducer || []
   );
   console.log("jobsListjobListjobList :>> ", jobList);
 
-  // const applyId=useMemo(()=>{
-  //   const data=JSON.stringify(localStorage.getItem("applyJob"))
-  // },[])
+  console.log("applyId :>> ", applyId);
 
   const fetchJobsList = async () => {
     setLoading(true);
@@ -36,6 +38,9 @@ const Home = () => {
 
   useEffect(() => {
     fetchJobsList();
+    const applyJob = JSON.parse(localStorage.getItem("applyJob")) || [];
+    const ids = applyJob.map((v) => v.jobApplyId);
+    setApplyId(ids);
   }, []);
 
   useEffect(() => {
@@ -108,11 +113,17 @@ const Home = () => {
                       ))}
                     </div>
 
-                    <Link href={`/job/${job.id}`}>
-                      <button className="bg-blue-600 cursor-pointer	 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-full">
-                        Apply
-                      </button>
-                    </Link>
+                    <button
+                      onClick={() => router.push(`/job/${job.id}`)}
+                      disabled={applyId.includes(job.id)}
+                      className={`text-white text-sm px-4 py-2 rounded-full transition ${
+                        applyId.includes(job.id)
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                      }`}
+                    >
+                      {applyId.includes(job.id) ? "Applied" : "Apply"}
+                    </button>
                   </div>
                 </Link>
               ))

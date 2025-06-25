@@ -86,7 +86,7 @@ const Home = () => {
             </select>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {Array.isArray(filtersJobs) && filtersJobs.length > 0 ? (
               filtersJobs?.map((job) => (
                 <Link href={`/job/details/${job.id}`}>

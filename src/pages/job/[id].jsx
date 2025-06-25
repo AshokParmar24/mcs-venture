@@ -29,10 +29,11 @@ const ApplyForJob = () => {
       file: file,
       jobApplyId: id,
     };
+    console.log("filedffffffff", file);
     if (!file) {
       setErr(true);
     } else {
-      const applyJob = JSON.stringify(localStorage.getItem("applyJob"));
+      const applyJob = JSON.parse(localStorage.getItem("applyJob")) || [];
       const newApply = [...applyJob, payload];
       localStorage.setItem("applyJob", JSON.stringify(newApply));
       reset();
@@ -44,8 +45,6 @@ const ApplyForJob = () => {
   useEffect(() => {
     if (file) {
       setErr(false);
-    } else {
-      setErr(true);
     }
   }, [file]);
 
@@ -111,7 +110,6 @@ const ApplyForJob = () => {
           <div className="relative">
             <input
               type="file"
-              {...register("resume")}
               accept=".pdf,.doc,.docx"
               className={`w-full px-3 py-2 rounded h-30 p-2 
                         ${
@@ -120,8 +118,18 @@ const ApplyForJob = () => {
                             : "border border-gray-300"
                         }`}
               onChange={(e) => {
-                const file = e.target.files[0];
-                setFile(file || null);
+                const selectedFile = e.target.files[0];
+                if (!selectedFile) return;
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setFile({
+                    name: selectedFile.name,
+                    type: selectedFile.type,
+                    base64: reader.result,
+                  });
+                };
+                reader.readAsDataURL(selectedFile);
               }}
             />
 

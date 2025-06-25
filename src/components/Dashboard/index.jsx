@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { getJobsList } from "../../services/api";
 import { jobsListFilter, jobsListUpdate } from "@/redux/actions/jobsAction";
@@ -15,6 +15,10 @@ const Home = () => {
     (state) => state?.jobsReducer || []
   );
   console.log("jobsListjobListjobList :>> ", jobList);
+
+  // const applyId=useMemo(()=>{
+  //   const data=JSON.stringify(localStorage.getItem("applyJob"))
+  // },[])
 
   const fetchJobsList = async () => {
     setLoading(true);
